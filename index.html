@@ -1,351 +1,857 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>지구 탈출 프로젝트 - 드림호(Dream) 보드게임</title>
-<style>
-  :root{
-    --bg:#0e1330; --panel:#171d45; --panel2:#1f2757; --text:#eef1ff; --muted:#9aa4d6;
-    --good:#2fbf71; --bad:#ef5b5b; --rest:#4a8cff; --again:#f5a623; --goal:#9b7bff;
-    --p0:#2fbf71; --p1:#ef5b5b;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
-    background:radial-gradient(ellipse at top,#1b2260 0%,var(--bg) 60%);color:var(--text);min-height:100vh}
-  .wrap{display:flex;gap:20px;padding:20px;max-width:1300px;margin:0 auto;align-items:flex-start}
-  .side{width:340px;flex-shrink:0;background:var(--panel);border-radius:18px;padding:20px;box-shadow:0 8px 30px #0006}
-  .side h1{margin:0 0 4px;font-size:26px;line-height:1.25;text-align:center}
-  .side .sub{text-align:center;color:var(--muted);font-size:14px;margin-bottom:16px}
-  .player{border:2px solid transparent;background:var(--panel2);border-radius:14px;padding:12px 14px;margin-bottom:10px;transition:.2s}
-  .player.active{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent)}
-  .player .name{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
-  .dot{width:16px;height:16px;border-radius:50%;background:var(--c);display:inline-block}
-  .player .state{color:var(--muted);font-size:14px;margin-top:4px}
-  label.small{display:block;color:var(--muted);font-size:13px;margin:14px 0 6px}
-  .row{display:flex;gap:8px}
-  #dice{width:84px;font-size:34px;font-weight:800;text-align:center;border-radius:12px;border:2px solid #3a4584;background:#0f1538;color:#fff;padding:6px 0}
-  button{font-family:inherit;cursor:pointer;border:0;border-radius:12px;font-weight:800}
-  #go{flex:1;background:#5b8cff;color:#fff;font-size:20px}
-  #go:disabled{opacity:.45;cursor:not-allowed}
-  #reset,#sound{width:100%;margin-top:8px;background:#2a3370;color:var(--text);padding:12px;font-size:15px}
-  .opt{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--muted);margin-top:14px;line-height:1.4}
-  .opt input{margin-top:3px}
-  #msg{margin-top:14px;background:#0f1538;border-radius:12px;padding:12px;font-size:15px;min-height:64px;line-height:1.5}
-  #ask{display:none;margin-top:10px;background:#2b2150;border:2px solid var(--again);border-radius:12px;padding:12px}
-  #ask p{margin:0 0 8px;font-size:15px;line-height:1.45}
-  #ask button{padding:10px 14px;font-size:15px;margin-right:6px}
-  #askYes{background:var(--good);color:#fff}
-  #askNo{background:var(--bad);color:#fff}
-  #log{margin-top:12px;max-height:150px;overflow:auto;font-size:13px;color:var(--muted);line-height:1.6}
-  .board{flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-  .cell{position:relative;aspect-ratio:1/0.92;background:#1a2150;border:2px solid #2d3877;border-radius:14px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px}
-  .cell .n{position:absolute;top:5px;left:8px;font-size:12px;color:#7d89c9;font-weight:700}
-  .cell .ic{font-size:clamp(22px,3.2vw,38px);line-height:1}
-  .cell .lb{font-size:clamp(10px,1.1vw,13px);font-weight:700;margin-top:3px;line-height:1.2}
-  .cell.good{border-color:var(--good);background:#16352f}
-  .cell.bad{border-color:var(--bad);background:#3a1f33}
-  .cell.rest{border-color:var(--rest);background:#182d5c}
-  .cell.again{border-color:var(--again);background:#3a3020}
-  .cell.start{border-color:#59d4c0;background:#143a3f}
-  .cell.goal{border-color:var(--goal);background:#2c2563}
-  .tokens{position:absolute;bottom:4px;right:6px;display:flex;gap:2px}
-  .token{width:clamp(20px,2.6vw,32px);height:clamp(20px,2.6vw,32px);border-radius:50%;background:var(--c);
-    display:flex;align-items:center;justify-content:center;font-size:clamp(12px,1.6vw,18px);border:2px solid #fff;
-    box-shadow:0 2px 6px #0008;animation:pop .25s}
-  @keyframes pop{from{transform:scale(.4)}to{transform:scale(1)}}
-  #win{display:none;position:fixed;inset:0;background:#000b;align-items:center;justify-content:center;z-index:9}
-  #win .box{background:var(--panel);padding:36px 44px;border-radius:22px;text-align:center;max-width:90vw}
-  #win h2{font-size:34px;margin:0 0 10px}
-  #win p{color:var(--muted);font-size:18px;margin:0 0 20px}
-  #win button{background:#5b8cff;color:#fff;font-size:18px;padding:12px 28px}
-  @media(max-width:860px){
-    .wrap{flex-direction:column;padding:12px}
-    .side{width:100%}
-    .board{width:100%;gap:6px}
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1a2b49">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>2026 괌 한마 글로벌 스프린트 가이드</title>
+  <style>
+    :root {
+      --primary: #1a2b49;
+      --primary-light: #2c426b;
+      --accent: #ff6b4a;
+      --accent-soft: #fff1ee;
+      --teal: #0fa4af;
+      --teal-light: #e6f7f8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 90px;
+      word-break: keep-all;
+    }
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #1a2b49 0%, #224379 100%);
+      color: #fff;
+      padding: 24px 20px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .header-top { display: flex; justify-content: space-between; align-items: center; }
+    .badge {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    h1 { font-size: 20px; font-weight: 800; margin-top: 8px; letter-spacing: -0.5px; }
+    .header-sub { font-size: 13px; opacity: 0.85; margin-top: 2px; }
+    
+    /* Countdown Banner */
+    .countdown-card {
+      margin: 16px 20px 0;
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border);
+    }
+    .countdown-title { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+    .countdown-val { font-size: 18px; font-weight: 800; color: var(--accent); margin-top: 2px; }
+    .countdown-tag { background: var(--accent-soft); color: var(--accent); padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+
+    /* Nav Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 16px;
+      z-index: 200;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      gap: 4px;
+      width: 20%;
+    }
+    .nav-btn.active { color: var(--primary); }
+    .nav-icon { font-size: 20px; }
+
+    /* Container */
+    .container { padding: 16px 20px; max-width: 600px; margin: 0 auto; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Section Styles */
+    .section-title { font-size: 17px; font-weight: 800; margin: 18px 0 10px; display: flex; align-items: center; gap: 8px; }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    /* Itinerary Timeline */
+    .day-selector { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .day-selector::-webkit-scrollbar { display: none; }
+    .day-btn {
+      flex: 1;
+      min-width: 72px;
+      padding: 10px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .day-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .timeline { position: relative; padding-left: 20px; border-left: 2px dashed var(--border); margin-left: 10px; }
+    .tl-item { position: relative; margin-bottom: 18px; }
+    .tl-dot {
+      position: absolute;
+      left: -27px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+    .tl-time { font-size: 12px; font-weight: 700; color: var(--accent); }
+    .tl-title { font-size: 15px; font-weight: 700; margin-top: 2px; }
+    .tl-desc { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+
+    /* Flashcards */
+    .category-pills { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px; scrollbar-width: none; }
+    .cat-pill {
+      white-space: nowrap;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .cat-pill.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .phrase-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .phrase-kr { font-size: 14px; font-weight: 700; color: var(--text); }
+    .phrase-en { font-size: 15px; font-weight: 800; color: var(--primary); margin-top: 3px; }
+    .phrase-pron { font-size: 12px; color: var(--teal); margin-top: 2px; }
+    .speak-btn {
+      background: var(--teal-light);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: var(--teal);
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Calculator */
+    .calc-box { background: #fff; border-radius: 16px; padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .calc-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .calc-input {
+      flex: 1;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      outline: none;
+      text-align: right;
+    }
+    .calc-input:focus { border-color: var(--primary); }
+    .calc-unit { font-size: 16px; font-weight: 700; color: var(--text-muted); width: 45px; }
+    .calc-result {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .calc-krw { font-size: 24px; font-weight: 900; color: var(--primary); }
+
+    /* Map & Hotspots */
+    .spot-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .spot-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .spot-name { font-size: 15px; font-weight: 700; }
+    .spot-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .map-btn {
+      margin-left: auto;
+      padding: 6px 12px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    /* Memo & Tips */
+    .memo-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 8px;
+      outline: none;
+      resize: vertical;
+    }
+    .btn-save {
+      width: 100%;
+      padding: 10px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .memo-list { margin-top: 14px; }
+    .memo-item {
+      background: #fff;
+      border-left: 4px solid var(--teal);
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .del-btn { color: #ef4444; background: none; border: none; font-size: 14px; cursor: pointer; padding: 4px; }
+    .tip-box { background: #fff8e6; border: 1px solid #ffd591; border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-bottom: 10px; }
+    .tip-title { font-weight: 800; color: #d46b08; margin-bottom: 4px; }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <aside class="side">
-    <h1>🚀 지구 탈출 프로젝트<br>드림호(Dream) 작전</h1>
-    <div class="sub">소행성 충돌 D-day! 새 행성까지 먼저 도착하라</div>
 
-    <div class="player active" id="pl0" style="--c:var(--p0)">
-      <div class="name"><span class="dot"></span><span id="nm0">1팀 · 초록 우주선</span></div>
-      <div class="state" id="st0">출발 대기</div>
+  <!-- Header -->
+  <header>
+    <div class="header-top">
+      <span class="badge">경남대학교 × 괌대학교(UOG)</span>
+      <span style="font-size: 12px; opacity: 0.9;">2026.11.15~18</span>
     </div>
-    <div class="player" id="pl1" style="--c:var(--p1)">
-      <div class="name"><span class="dot"></span><span id="nm1">2팀 · 빨간 우주선</span></div>
-      <div class="state" id="st1">출발 대기</div>
+    <h1>🌴 괌 한마 글로벌 스프린트</h1>
+    <div class="header-sub">학우 전용 포켓 가이드북 & 스마트 핸드북</div>
+  </header>
+
+  <!-- Countdown Card -->
+  <div class="countdown-card">
+    <div>
+      <div class="countdown-title">출국 D-Day 카운트다운</div>
+      <div class="countdown-val" id="countdown">계산 중...</div>
+    </div>
+    <div class="countdown-tag" id="status-tag">준비 모드</div>
+  </div>
+
+  <div class="container">
+    
+    <!-- TAB 1: ITINERARY -->
+    <div id="tab-schedule" class="tab-content active">
+      <div class="section-title">🗓️ 3박 4일 일정표</div>
+      
+      <div class="day-selector">
+        <button class="day-btn active" onclick="showDay(1)">1일차 (11/15)</button>
+        <button class="day-btn" onclick="showDay(2)">2일차 (11/16)</button>
+        <button class="day-btn" onclick="showDay(3)">3일차 (11/17)</button>
+        <button class="day-btn" onclick="showDay(4)">4일차 (11/18)</button>
+      </div>
+
+      <!-- Day 1 -->
+      <div id="day-1" class="day-panel">
+        <div class="card">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">18:00</div>
+              <div class="tl-title">김해공항 국제선 2층 집결</div>
+              <div class="tl-desc">진에어 카운터 앞 인솔교수·학우 집결, ETA/DRC 서류 확인 및 수하물 수속</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">20:40</div>
+              <div class="tl-title">김해공항 출발 (진에어 LJ531)</div>
+              <div class="tl-desc">부산(PUS) ➔ 괌(GUM) 직항 비행 (약 4시간 소요)</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">01:40 (+1일)</div>
+              <div class="tl-title">괌 안토니오 B. 원 팻 공항 도착</div>
+              <div class="tl-desc">입국심사 (목적: Training program), 세관검역(EDF QR 통과) 및 전용 버스 탑승</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">02:30</div>
+              <div class="tl-title">가든코트 기숙사 체크인 & 취침</div>
+              <div class="tl-desc">객실 배정(4인 1실), 개인 짐 정리 및 휴식 (※수건·세면도구 미제공 유의)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div id="day-2" class="day-panel" style="display: none;">
+        <div class="card">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">09:00</div>
+              <div class="tl-title">조식 & UOG 캠퍼스 이동</div>
+              <div class="tl-desc">간단 조식 후 괌대학교(UOG) 글로벌 러닝 센터 이동</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">10:00</div>
+              <div class="tl-title">오리엔테이션 & 한마 스프린트 워크숍</div>
+              <div class="tl-desc">현지 교수진 특강, 조별 버디 매칭 및 프로젝트 미션 오리엔테이션</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">12:30</div>
+              <div class="tl-title">UOG 학생식당 중식 & 교류</div>
+              <div class="tl-desc">현지 버디 학생들과 팀별 점심 식사</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">14:00</div>
+              <div class="tl-title">글로벌 스프린트 팀 미션 수행</div>
+              <div class="tl-desc">캠퍼스 탐방 및 괌 로컬 문화·산업 분석 과제 활동</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">18:00</div>
+              <div class="tl-title">투몬 비치 석식 & 자유시간</div>
+              <div class="tl-desc">투몬 중심가 맛집 탐방 및 야간 자유 휴식 (카카오택시 활용)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div id="day-3" class="day-panel" style="display: none;">
+        <div class="card">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">09:30</div>
+              <div class="tl-title">스프린트 프로젝트 최종 발표 & 수료식</div>
+              <div class="tl-desc">팀별 결과물 피칭, UOG 공식 수료증 수여 및 단체 사진 촬영</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">13:30</div>
+              <div class="tl-title">괌 남부 아일랜드 투어</div>
+              <div class="tl-desc">사랑의 절벽, 스페인 광장, 세티만 전망대 등 명소 탐방 & 사진 미션</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">18:30</div>
+              <div class="tl-title">환송 만찬 & 팀 네트워킹</div>
+              <div class="tl-desc">연수 성과 회고 및 학우·교수진 화합의 밤</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 4 -->
+      <div id="day-4" class="day-panel" style="display: none;">
+        <div class="card">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">11:00</div>
+              <div class="tl-title">가든코트 기숙사 체크아웃</div>
+              <div class="tl-desc">객실 청결 정리 및 카드키 반납 (분실 주의)</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background: var(--accent);"></div>
+              <div class="tl-time">14:00</div>
+              <div class="tl-title">🛍️ Don Don Donki (돈키호테 괌) 단체 방문!</div>
+              <div class="tl-desc">공식 일정 19번 쇼핑 코스! 괌 기념품, 바나나칩, 과자, 초콜릿 쇼핑 및 푸드코트 중식</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">18:00</div>
+              <div class="tl-title">투몬 시내 마지막 자유시간</div>
+              <div class="tl-desc">선셋 감상, K마트 또는 쇼핑몰 자유 이동</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">23:30</div>
+              <div class="tl-title">괌 국제공항 이동 & 출국 수속</div>
+              <div class="tl-desc">진에어 카운터 수하물 위탁 및 보안검색</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">02:50 (+1일)</div>
+              <div class="tl-title">진에어 LJ532 탑승 ➔ 06:40 김해 도착</div>
+              <div class="tl-desc">부산 김해공항 무사 귀국 및 해산</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <label class="small" for="dice">마이크로비트 주사위 값 (1~6)</label>
-    <div class="row">
-      <input id="dice" type="number" min="1" max="6" value="1" inputmode="numeric">
-      <button id="go">이동하기</button>
+    <!-- TAB 2: ENGLISH PHRASES -->
+    <div id="tab-english" class="tab-content">
+      <div class="section-title">🗣️ 괌 생존 영어 회화</div>
+      
+      <div class="category-pills">
+        <button class="cat-pill active" onclick="filterPhrases('all')">전체보기</button>
+        <button class="cat-pill" onclick="filterPhrases('airport')">✈️ 입국심사</button>
+        <button class="cat-pill" onclick="filterPhrases('hotel')">🏨 기숙사</button>
+        <button class="cat-pill" onclick="filterPhrases('dining')">🍽️ 식당·카페</button>
+        <button class="cat-pill" onclick="filterPhrases('shopping')">🛍️ 돈키·쇼핑</button>
+        <button class="cat-pill" onclick="filterPhrases('move')">🚕 이동·택시</button>
+      </div>
+
+      <div id="phrase-container">
+        <!-- Airport -->
+        <div class="phrase-card" data-cat="airport">
+          <div>
+            <div class="phrase-kr">방문 목적: "연수 프로그램 참여하러 왔어요"</div>
+            <div class="phrase-en">I'm here for a training program.</div>
+            <div class="phrase-pron">아임 히어 포 어 트레이닝 프로그램</div>
+          </div>
+          <button class="speak-btn" onclick="speak('I am here for a training program.')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="airport">
+          <div>
+            <div class="phrase-kr">체류 기간: "4일 동안 머물 예정입니다"</div>
+            <div class="phrase-en">I will stay for 4 days.</div>
+            <div class="phrase-pron">아이 윌 스테이 포 포 데이즈</div>
+          </div>
+          <button class="speak-btn" onclick="speak('I will stay for four days.')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="airport">
+          <div>
+            <div class="phrase-kr">숙소: "가든코트 기숙사에 머물러요"</div>
+            <div class="phrase-en">I'm staying at Garden Court.</div>
+            <div class="phrase-pron">아임 스테잉 앳 가든 코트</div>
+          </div>
+          <button class="speak-btn" onclick="speak('I am staying at Garden Court.')">🔊</button>
+        </div>
+
+        <!-- Hotel/Dorm -->
+        <div class="phrase-card" data-cat="hotel">
+          <div>
+            <div class="phrase-kr">"와이파이 비밀번호가 무엇인가요?"</div>
+            <div class="phrase-en">What is the Wi-Fi password?</div>
+            <div class="phrase-pron">왓 이즈 더 와이파이 패스워드?</div>
+          </div>
+          <button class="speak-btn" onclick="speak('What is the Wi-Fi password?')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="hotel">
+          <div>
+            <div class="phrase-kr">"수건을 더 받을 수 있을까요?"</div>
+            <div class="phrase-en">Can I get extra towels, please?</div>
+            <div class="phrase-pron">캔 아이 겟 엑스트라 타월스 플리즈?</div>
+          </div>
+          <button class="speak-btn" onclick="speak('Can I get extra towels, please?')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="hotel">
+          <div>
+            <div class="phrase-kr">"에어컨 온도를 조절하고 싶어요"</div>
+            <div class="phrase-en">How do I adjust the air conditioner?</div>
+            <div class="phrase-pron">하우 두 아이 어저스트 디 에어컨디셔너?</div>
+          </div>
+          <button class="speak-btn" onclick="speak('How do I adjust the air conditioner?')">🔊</button>
+        </div>
+
+        <!-- Dining -->
+        <div class="phrase-card" data-cat="dining">
+          <div>
+            <div class="phrase-kr">"이것과 이것 주세요" (메뉴판 가리키며)</div>
+            <div class="phrase-en">I'll have this one and this one, please.</div>
+            <div class="phrase-pron">아일 해브 디스 원 앤 디스 원 플리즈</div>
+          </div>
+          <button class="speak-btn" onclick="speak('I will have this one and this one, please.')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="dining">
+          <div>
+            <div class="phrase-kr">"얼음물 좀 주시겠어요?"</div>
+            <div class="phrase-en">Could we get some ice water, please?</div>
+            <div class="phrase-pron">쿠드 위 겟 썸 아이스 워터 플리즈?</div>
+          </div>
+          <button class="speak-btn" onclick="speak('Could we get some ice water, please?')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="dining">
+          <div>
+            <div class="phrase-kr">"계산서 부탁드립니다"</div>
+            <div class="phrase-en">Check, please. (or Bill, please.)</div>
+            <div class="phrase-pron">체크 플리즈</div>
+          </div>
+          <button class="speak-btn" onclick="speak('Check, please.')">🔊</button>
+        </div>
+
+        <!-- Shopping -->
+        <div class="phrase-card" data-cat="shopping">
+          <div>
+            <div class="phrase-kr">"카드로 결제할게요"</div>
+            <div class="phrase-en">I'd like to pay by card.</div>
+            <div class="phrase-pron">아이드 라이크 투 페이 바이 카드</div>
+          </div>
+          <button class="speak-btn" onclick="speak('I would like to pay by card.')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="shopping">
+          <div>
+            <div class="phrase-kr">"쇼핑백 하나 부탁해요"</div>
+            <div class="phrase-en">Can I get a shopping bag?</div>
+            <div class="phrase-pron">캔 아이 겟 어 쇼핑 백?</div>
+          </div>
+          <button class="speak-btn" onclick="speak('Can I get a shopping bag?')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="shopping">
+          <div>
+            <div class="phrase-kr">"이거 선물용으로 포장되나요?"</div>
+            <div class="phrase-en">Can you gift wrap this?</div>
+            <div class="phrase-pron">캔 유 기프트 랩 디스?</div>
+          </div>
+          <button class="speak-btn" onclick="speak('Can you gift wrap this?')">🔊</button>
+        </div>
+
+        <!-- Transport -->
+        <div class="phrase-card" data-cat="move">
+          <div>
+            <div class="phrase-kr">"가든코트 기숙사로 가주세요"</div>
+            <div class="phrase-en">Please take me to Garden Court.</div>
+            <div class="phrase-pron">플리즈 테이크 미 투 가든 코트</div>
+          </div>
+          <button class="speak-btn" onclick="speak('Please take me to Garden Court.')">🔊</button>
+        </div>
+        <div class="phrase-card" data-cat="move">
+          <div>
+            <div class="phrase-kr">"돈키호테(빌리지 오브 돈키) 가나요?"</div>
+            <div class="phrase-en">Does this go to Village of Donki?</div>
+            <div class="phrase-pron">더즈 디스 고 투 빌리지 오브 돈키?</div>
+          </div>
+          <button class="speak-btn" onclick="speak('Does this go to Village of Donki?')">🔊</button>
+        </div>
+      </div>
     </div>
 
-    <label class="opt">
-      <input type="checkbox" id="mission">
-      <span>🛡 마이크로비트 미션 모드<br>위기 칸(뒤로 가기·쉬기)에 멈추면 마이크로비트 미션에 성공해야 피할 수 있어요.</span>
-    </label>
+    <!-- TAB 3: CALCULATOR -->
+    <div id="tab-calc" class="tab-content">
+      <div class="section-title">💵 달러 ➔ 원화 즉시 계산기</div>
+      
+      <div class="calc-box">
+        <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">기준 환율: 1 USD = 1,335 KRW</div>
+        <div class="calc-row">
+          <input type="number" id="usd-input" class="calc-input" placeholder="0" oninput="calcExchange()">
+          <span class="calc-unit">USD ($)</span>
+        </div>
+        <div class="calc-result">
+          <div style="font-size: 13px; color: var(--text-muted);">한국 원화 환산액</div>
+          <div class="calc-krw" id="krw-output">0 원</div>
+        </div>
 
-    <div id="ask">
-      <p id="askText"></p>
-      <button id="askYes">성공 ✅</button><button id="askNo">실패 ❌</button>
+        <div style="margin-top: 20px; border-top: 1px dashed var(--border); padding-top: 16px;">
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 8px;">🍽️ 식당 팁 계산기 (기본 15%)</div>
+          <div style="display: flex; gap: 8px;">
+            <button style="flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 700;" onclick="calcTip(10)">10%</button>
+            <button style="flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-weight: 700;" onclick="calcTip(15)">15% (추천)</button>
+            <button style="flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-weight: 700;" onclick="calcTip(18)">18%</button>
+          </div>
+          <div id="tip-result" style="font-size: 13px; color: var(--accent); font-weight: 700; margin-top: 8px; text-align: center;"></div>
+        </div>
+      </div>
     </div>
 
-    <div id="msg">주사위를 굴려 입력하고 <b>이동하기</b>를 눌러 보세요!</div>
-    <div id="log"></div>
-    <button id="sound">🔊 효과음 켜짐</button>
-    <button id="reset">처음부터</button>
-  </aside>
+    <!-- TAB 4: MAPS -->
+    <div id="tab-map" class="tab-content">
+      <div class="section-title">🗺️ 주요 거점 & 구글 지도</div>
 
-  <main class="board" id="board"></main>
-</div>
+      <div class="spot-card">
+        <div class="spot-icon">🏬</div>
+        <div>
+          <div class="spot-name">Don Don Donki (빌리지 오브 돈키)</div>
+          <div class="spot-desc">마지막 날 방문 코스! 기념품, 식료품, 푸드코트</div>
+        </div>
+        <a href="https://maps.google.com/?q=Don+Don+Donki+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
 
-<div id="win"><div class="box">
-  <h2 id="winTitle"></h2>
-  <p>드림호가 새 행성에 무사히 도착했습니다! 🪐</p>
-  <button id="again">한 판 더</button>
-</div></div>
+      <div class="spot-card">
+        <div class="spot-icon">🏫</div>
+        <div>
+          <div class="spot-name">가든코트 기숙사 (Garden Court)</div>
+          <div class="spot-desc">연수 기간 숙소 (투몬 중심가 인근)</div>
+        </div>
+        <a href="https://maps.google.com/?q=Garden+Court+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
 
-<script>
-const GOAL = 30;
-const NAMES = ["1팀 · 초록 우주선", "2팀 · 빨간 우주선"];
+      <div class="spot-card">
+        <div class="spot-icon">🎓</div>
+        <div>
+          <div class="spot-name">괌대학교 (University of Guam)</div>
+          <div class="spot-desc">한마 글로벌 스프린트 워크숍 & 수료식</div>
+        </div>
+        <a href="https://maps.google.com/?q=University+of+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
 
-// 칸 이벤트: type = good(앞으로) | bad(뒤로) | rest(쉬기) | again(한 번 더)
-const EV = {
-  3:  {type:"good",  d:+3, icon:"⛽", label:"+3칸<br>연료 보급!", msg:"연료 보급 성공! 3칸 앞으로 이동합니다."},
-  7:  {type:"bad",   d:-3, icon:"☄️", label:"-3칸<br>운석 충돌", msg:"운석과 충돌했어요! 3칸 뒤로 밀려납니다.", mission:"A버튼을 눌러 방어막을 가동하세요!"},
-  10: {type:"rest",  icon:"🫧", label:"쉬기<br>산소 부족", msg:"산소가 부족해요. 다음 차례를 쉽니다.", mission:"마이크로비트를 5번 흔들어 산소를 복구하세요!"},
-  13: {type:"good",  d:+4, icon:"☀️", label:"+4칸<br>태양풍 가속!", msg:"태양풍을 타고 4칸 앞으로 쑥!"},
-  16: {type:"bad",   d:-2, icon:"🌀", label:"-2칸<br>궤도 이탈", msg:"궤도를 이탈했어요! 2칸 뒤로 이동합니다.", mission:"A버튼을 눌러 방어막을 가동하세요!"},
-  19: {type:"again", icon:"🔋", label:"한번더<br>재충전!", msg:"에너지 재충전 완료! 한 번 더 굴리세요."},
-  22: {type:"good",  d:+3, icon:"🤝", label:"+3칸<br>동료 지원!", msg:"동료 우주선이 도와줬어요! 3칸 앞으로."},
-  25: {type:"bad",   d:-4, icon:"🕳️", label:"-4칸<br>블랙홀", msg:"블랙홀에 끌려갑니다! 4칸 뒤로...", mission:"A버튼을 눌러 방어막을 가동하세요!"},
-  28: {type:"rest",  icon:"🔧", label:"쉬기<br>엔진 고장", msg:"엔진이 고장났어요. 다음 차례를 쉽니다.", mission:"마이크로비트를 5번 흔들어 엔진을 수리하세요!"},
-};
-const FILLERS = ["🌌","⭐","🛰️","🌠","🪐","✨"];
+      <div class="spot-card">
+        <div class="spot-icon">🛒</div>
+        <div>
+          <div class="spot-name">괌 K마트 (Kmart Guam)</div>
+          <div class="spot-desc">24시간 미국 대형마트, 센트룸, 바나나보트 선크림</div>
+        </div>
+        <a href="https://maps.google.com/?q=Kmart+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
 
-const pos = [1,1], skip = [false,false];
-let turn = 0, busy = false, over = false;
-const cells = {}, tokenEls = [];
+      <div class="spot-card">
+        <div class="spot-icon">🏖️</div>
+        <div>
+          <div class="spot-name">투몬 비치 (Tumon Beach)</div>
+          <div class="spot-desc">선셋 명소, 에메랄드빛 해변 산책로</div>
+        </div>
+        <a href="https://maps.google.com/?q=Tumon+Beach+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
+    </div>
 
-const $ = id => document.getElementById(id);
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+    <!-- TAB 5: TIPS & MEMO -->
+    <div id="tab-tips" class="tab-content">
+      <div class="section-title">📋 기숙사 수칙 & 학우 메모</div>
 
-/* ---------- 효과음 (Web Audio, 파일 없이 합성) ---------- */
-let audioCtx = null, soundOn = true;
-function ac(){
-  if(!audioCtx){
-    const A = window.AudioContext || window.webkitAudioContext;
-    if(A) audioCtx = new A();
-  }
-  if(audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-  return audioCtx;
-}
-function tone(freq, start, dur, type="sine", vol=0.15, slideTo){
-  const c = ac();
-  if(!c || !soundOn) return;
-  const t = c.currentTime + start;
-  const o = c.createOscillator(), g = c.createGain();
-  o.type = type;
-  o.frequency.setValueAtTime(freq, t);
-  if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
-  g.gain.setValueAtTime(0.0001, t);
-  g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
-  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  o.connect(g); g.connect(c.destination);
-  o.start(t); o.stop(t + dur + 0.05);
-}
-const SFX = {
-  roll(){ tone(700,0,0.05,"square",0.07); tone(500,0.07,0.05,"square",0.07); },
-  step(n, back){                       // 칸을 한 칸 지날 때마다 "톡"
-    const base = back ? 420 : 520;
-    tone(base + (back ? -n*18 : n*22), 0, 0.11, "triangle", 0.13);
-  },
-  good(){ [523,659,784,1047].forEach((f,i)=>tone(f, i*0.09, 0.18, "square", 0.08)); },       // 상승 팡파르
-  bad(){ tone(320,0,0.55,"sawtooth",0.11,70); tone(160,0.05,0.5,"square",0.07,50); },        // 하강 경고음
-  rest(){ tone(330,0,0.25,"sine",0.14); tone(262,0.25,0.25,"sine",0.14); tone(196,0.5,0.45,"sine",0.14); },
-  again(){ [784,988,1175,1568].forEach((f,i)=>tone(f, i*0.06, 0.12, "triangle", 0.12)); },   // 반짝 충전음
-  ok(){ tone(880,0,0.12,"sine",0.14); tone(1320,0.12,0.28,"sine",0.14); },                   // 미션 성공
-  win(){                                                                                       // 탈출 성공 팡파르
-    const seq = [[523,0],[523,.14],[523,.28],[659,.42],[784,.62],[659,.82],[784,1.0],[1047,1.25]];
-    seq.forEach(([f,t],i)=>tone(f, t, i===seq.length-1 ? 0.9 : 0.16, "square", 0.09));
-    [523,659,784,1047].forEach(f=>tone(f, 1.25, 1.1, "triangle", 0.07));
-  }
-};
+      <div class="tip-box">
+        <div class="tip-title">⚠️ 가든코트 기숙사 필수 준수사항</div>
+        • <strong>수건·세면도구 미제공:</strong> 수건, 칫솔, 샴푸 등 개인 지참 필수<br>
+        • <strong>21:00 이후 정숙:</strong> 타 객실 방문 절대 금지 (적발 시 퇴실)<br>
+        • <strong>면세점 주류 반입 금지:</strong> 기숙사 내 음주 적발 시 징계<br>
+        • <strong>쓰레기 무단투기 금지:</strong> 복도 투기 적발 시 벌금 $300 부과
+      </div>
 
-/* ---------- 보드 만들기 (뱀 모양, 아래→위) ---------- */
-function buildBoard(){
-  const board = $("board");
-  board.innerHTML = "";
-  for(let r=4; r>=0; r--){
-    for(let c=0; c<6; c++){
-      const n = r*6 + (r%2===0 ? c+1 : 6-c);
-      const el = document.createElement("div");
-      el.className = "cell";
-      let icon, label = "";
-      if(n===1){ el.classList.add("start"); icon="🌍"; label="출발!<br>지구"; }
-      else if(n===GOAL){ el.classList.add("goal"); icon="🪐"; label="도착!<br>새 행성"; }
-      else if(EV[n]){ el.classList.add(EV[n].type); icon=EV[n].icon; label=EV[n].label; }
-      else { icon=FILLERS[n%FILLERS.length]; label=""; }
-      el.innerHTML = `<span class="n">${n}</span><span class="ic">${icon}</span><span class="lb">${label}</span><div class="tokens"></div>`;
-      board.appendChild(el);
-      cells[n] = el;
+      <div class="tip-box" style="background: #e6f7f8; border-color: #87e8de;">
+        <div class="tip-title" style="color: #006d75;">💡 괌 현지 이동 팁</div>
+        • <strong>카카오택시:</strong> 괌에서도 한국 카카오T로 택시 호출 가능!<br>
+        • <strong>PIC 무료 셔틀:</strong> PIC 호텔 앞에서 돈키호테 무료 셔틀 운행
+      </div>
+
+      <div class="card" style="margin-top: 14px;">
+        <div style="font-weight: 700; margin-bottom: 8px;">📝 학우들과 공유할 메모 / 준비물 메모</div>
+        <textarea id="memo-input" class="memo-input" rows="2" placeholder="공유할 메모나 조별 준비물을 적어보세요..."></textarea>
+        <button class="btn-save" onclick="addMemo()">메모 등록하기</button>
+        <div id="memo-list" class="memo-list"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('schedule', this)">
+      <span class="nav-icon">🗓️</span>
+      <span>일정</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('english', this)">
+      <span class="nav-icon">🗣️</span>
+      <span>회화</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('calc', this)">
+      <span class="nav-icon">💵</span>
+      <span>환율</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('map', this)">
+      <span class="nav-icon">🗺️</span>
+      <span>지도</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('tips', this)">
+      <span class="nav-icon">📋</span>
+      <span>수칙</span>
+    </button>
+  </nav>
+
+  <script>
+    // Tab switching
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }
-}
 
-function makeTokens(){
-  [0,1].forEach(i=>{
-    const t = document.createElement("div");
-    t.className = "token";
-    t.style.setProperty("--c", i===0 ? "var(--p0)" : "var(--p1)");
-    t.textContent = i===0 ? "🚀" : "🛸";
-    tokenEls[i] = t;
-  });
-}
-function place(i){
-  cells[pos[i]].querySelector(".tokens").appendChild(tokenEls[i]);
-}
-
-/* ---------- 표시 ---------- */
-function say(t){ $("msg").innerHTML = t; }
-function log(t){
-  const d = document.createElement("div");
-  d.textContent = "• " + t;
-  $("log").prepend(d);
-}
-function refresh(){
-  [0,1].forEach(i=>{
-    $("pl"+i).classList.toggle("active", turn===i && !over);
-    $("st"+i).textContent = pos[i]===1 ? "출발 대기" : `${pos[i]}번 칸` + (skip[i] ? " · 다음 차례 쉬기" : "");
-  });
-  $("go").disabled = busy || over;
-}
-
-/* ---------- 이동 ---------- */
-async function walk(i, target){
-  const dir = target > pos[i] ? 1 : -1;
-  let n = 0;
-  while(pos[i] !== target){
-    pos[i] += dir;
-    place(i);
-    SFX.step(n++, dir < 0);
-    refresh();
-    await sleep(260);
-  }
-}
-
-function ask(text){
-  return new Promise(res=>{
-    $("askText").textContent = text;
-    $("ask").style.display = "block";
-    const done = v => { $("ask").style.display = "none"; res(v); };
-    $("askYes").onclick = () => done(true);
-    $("askNo").onclick  = () => done(false);
-  });
-}
-
-function nextTurn(){
-  turn = 1 - turn;
-  if(skip[turn]){
-    skip[turn] = false;
-    log(`${NAMES[turn]}: 이번 차례는 쉬어요.`);
-    say(`${NAMES[turn]}은(는) 이번 차례를 쉽니다. ${NAMES[1-turn]} 차례!`);
-    turn = 1 - turn;
-  }
-}
-
-async function roll(){
-  if(busy || over) return;
-  const v = parseInt($("dice").value, 10);
-  if(!(v>=1 && v<=6)){ say("⚠️ 주사위 값은 1~6만 입력할 수 있어요."); return; }
-
-  busy = true; refresh();
-  SFX.roll();
-  const p = turn;
-  log(`${NAMES[p]}: 주사위 ${v}`);
-  const target = Math.min(pos[p] + v, GOAL);
-  say(`${NAMES[p]} — 주사위 <b>${v}</b>! 이동합니다...`);
-  await walk(p, target);
-
-  if(pos[p] >= GOAL){ return win(p); }
-
-  const ev = EV[pos[p]];
-  if(!ev){
-    say(`${pos[p]}번 칸에 도착! 아무 일도 없어요.`);
-    nextTurn();
-  } else {
-    say(`<b>${ev.icon} ${ev.msg}</b>`);
-    log(`${pos[p]}번 칸: ${ev.msg}`);
-    const useMission = $("mission").checked;
-
-    if(ev.type==="good"){
-      SFX.good();
-      await sleep(700);
-      await walk(p, pos[p] + ev.d);
-      nextTurn();
-    } else if(ev.type==="bad"){
-      let avoided = false;
-      if(useMission) avoided = await ask(ev.mission + " 성공했나요?");
-      if(avoided){ SFX.ok(); say("🛡 방어 성공! 피해 없이 통과했어요."); log("방어 성공!"); }
-      else { SFX.bad(); await sleep(700); await walk(p, Math.max(1, pos[p] + ev.d)); }
-      nextTurn();
-    } else if(ev.type==="rest"){
-      let fixed = false;
-      if(useMission) fixed = await ask(ev.mission + " 성공했나요?");
-      if(fixed){ SFX.ok(); say("🔧 복구 성공! 쉬지 않고 계속 갑니다."); log("복구 성공!"); }
-      else { SFX.rest(); skip[p] = true; }
-      nextTurn();
-    } else if(ev.type==="again"){
-      SFX.again(); /* 같은 팀이 한 번 더 */
+    // Itinerary Day switching
+    function showDay(dayNum) {
+      document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.day-panel').forEach(p => p.style.display = 'none');
+      event.target.classList.add('active');
+      document.getElementById('day-' + dayNum).style.display = 'block';
     }
-  }
-  if(!over){
-    const t = turn;
-    $("msg").innerHTML += `<br>▶ <b>${NAMES[t]}</b> 차례`;
-  }
-  busy = false;
-  refresh();
-  $("dice").focus(); $("dice").select();
-}
 
-function win(p){
-  over = true; busy = false; refresh();
-  SFX.win();
-  log(`🏆 ${NAMES[p]} 도착!`);
-  $("winTitle").textContent = `🏆 ${NAMES[p]} 도착!`;
-  $("win").style.display = "flex";
-}
+    // Phrase filtering
+    function filterPhrases(cat) {
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      event.target.classList.add('active');
+      const cards = document.querySelectorAll('.phrase-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
 
-function resetGame(){
-  pos[0]=pos[1]=1; skip[0]=skip[1]=false; turn=0; busy=false; over=false;
-  $("win").style.display = "none";
-  $("ask").style.display = "none";
-  $("log").innerHTML = "";
-  $("dice").value = 1;
-  place(0); place(1);
-  say("주사위를 굴려 입력하고 <b>이동하기</b>를 눌러 보세요!");
-  refresh();
-}
+    // Text to Speech
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert('이 브라우저는 음성 듣기를 지원하지 않습니다.');
+      }
+    }
 
-/* ---------- 시작 ---------- */
-buildBoard(); makeTokens(); place(0); place(1); refresh();
-$("go").onclick = roll;
-$("dice").addEventListener("keydown", e => { if(e.key==="Enter") roll(); });
-$("reset").onclick = resetGame;
-$("sound").onclick = () => {
-  soundOn = !soundOn;
-  $("sound").textContent = soundOn ? "🔊 효과음 켜짐" : "🔇 효과음 꺼짐";
-  if(soundOn){ ac(); SFX.ok(); }
-};
-$("again").onclick = resetGame;
-</script>
+    // Exchange Calculator
+    const RATE = 1335;
+    function calcExchange() {
+      const val = parseFloat(document.getElementById('usd-input').value) || 0;
+      const krw = Math.round(val * RATE);
+      document.getElementById('krw-output').innerText = krw.toLocaleString() + ' 원';
+    }
+
+    function calcTip(percent) {
+      const val = parseFloat(document.getElementById('usd-input').value) || 0;
+      if (val === 0) {
+        document.getElementById('tip-result').innerText = '먼저 위 입력창에 금액($)을 입력해주세요.';
+        return;
+      }
+      const tip = (val * percent / 100).toFixed(2);
+      const total = (val + parseFloat(tip)).toFixed(2);
+      document.getElementById('tip-result').innerText = `팁 ${percent}%: $${tip} (총 합계: $${total})`;
+    }
+
+    // Countdown Timer
+    function updateCountdown() {
+      const departure = new Date('2026-11-15T18:00:00+09:00');
+      const now = new Date();
+      const diff = departure - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown').innerText = '연수 진행 중! ✈️';
+        document.getElementById('status-tag').innerText = '연수 중';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / 1000 / 60) % 60);
+
+      document.getElementById('countdown').innerText = `D-${days}일 ${hours}시간 ${mins}분`;
+    }
+    setInterval(updateCountdown, 60000);
+    updateCountdown();
+
+    // Local Storage Memo
+    function loadMemos() {
+      const list = document.getElementById('memo-list');
+      const saved = JSON.parse(localStorage.getItem('guam_memos') || '[]');
+      list.innerHTML = '';
+      if (saved.length === 0) {
+        list.innerHTML = '<div style="font-size:12px;color:#94a3b8;text-align:center;padding:8px;">등록된 메모가 없습니다.</div>';
+        return;
+      }
+      saved.forEach((m, idx) => {
+        const item = document.createElement('div');
+        item.className = 'memo-item';
+        item.innerHTML = `<span>${m}</span><button class="del-btn" onclick="deleteMemo(${idx})">✕</button>`;
+        list.appendChild(item);
+      });
+    }
+
+    function addMemo() {
+      const input = document.getElementById('memo-input');
+      const text = input.value.trim();
+      if (!text) return;
+      const saved = JSON.parse(localStorage.getItem('guam_memos') || '[]');
+      saved.push(text);
+      localStorage.setItem('guam_memos', JSON.stringify(saved));
+      input.value = '';
+      loadMemos();
+    }
+
+    function deleteMemo(idx) {
+      const saved = JSON.parse(localStorage.getItem('guam_memos') || '[]');
+      saved.splice(idx, 1);
+      localStorage.setItem('guam_memos', JSON.stringify(saved));
+      loadMemos();
+    }
+    loadMemos();
+  </script>
 </body>
 </html>
