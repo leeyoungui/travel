@@ -152,6 +152,20 @@
     .tl-time { font-size: 12px; font-weight: 700; color: var(--accent); }
     .tl-title { font-size: 15px; font-weight: 700; margin-top: 2px; }
     .tl-desc { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+    .tl-loc { display: inline-block; background: #f1f5f9; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #475569; margin-top: 4px; }
+
+    /* Meal Card */
+    .meal-card {
+      background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+      box-shadow: var(--shadow);
+    }
+    .meal-title { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+    .meal-desc { font-size: 12px; opacity: 0.9; margin-top: 4px; }
+    .meal-times { display: flex; justify-content: space-between; margin-top: 12px; background: rgba(255,255,255,0.12); padding: 10px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; }
 
     /* Flashcards */
     .category-pills { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px; scrollbar-width: none; }
@@ -305,7 +319,7 @@
       <span style="font-size: 12px; opacity: 0.9;">2026.11.15~18</span>
     </div>
     <h1>🌴 괌 한마 글로벌 스프린트</h1>
-    <div class="header-sub">학우 전용 포켓 가이드북 & 스마트 핸드북</div>
+    <div class="header-sub">학우 전용 포켓 가이드북 & 공식 일정표</div>
   </header>
 
   <!-- Countdown Card -->
@@ -321,13 +335,13 @@
     
     <!-- TAB 1: ITINERARY -->
     <div id="tab-schedule" class="tab-content active">
-      <div class="section-title">🗓️ 3박 4일 일정표</div>
+      <div class="section-title">🗓️ 3박 4일 공식 확정 일정표</div>
       
       <div class="day-selector">
-        <button class="day-btn active" onclick="showDay(1)">1일차 (11/15)</button>
-        <button class="day-btn" onclick="showDay(2)">2일차 (11/16)</button>
-        <button class="day-btn" onclick="showDay(3)">3일차 (11/17)</button>
-        <button class="day-btn" onclick="showDay(4)">4일차 (11/18)</button>
+        <button class="day-btn active" onclick="showDay(1)">1일차 (출발)</button>
+        <button class="day-btn" onclick="showDay(2)">2일차 (대학·현장)</button>
+        <button class="day-btn" onclick="showDay(3)">3일차 (체험·문화)</button>
+        <button class="day-btn" onclick="showDay(4)">4일차 (귀국)</button>
       </div>
 
       <!-- Day 1 -->
@@ -337,26 +351,21 @@
             <div class="tl-item">
               <div class="tl-dot"></div>
               <div class="tl-time">18:00</div>
-              <div class="tl-title">김해공항 국제선 2층 집결</div>
-              <div class="tl-desc">진에어 카운터 앞 인솔교수·학우 집결, ETA/DRC 서류 확인 및 수하물 수속</div>
+              <div class="tl-title">김해국제공항 2층 집결</div>
+              <div class="tl-desc">진에어 카운터 앞 인솔교수·학우 집결, ETA/DRC 서약서 확인 및 발권·수하물 수속</div>
             </div>
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">20:40</div>
-              <div class="tl-title">김해공항 출발 (진에어 LJ531)</div>
-              <div class="tl-desc">부산(PUS) ➔ 괌(GUM) 직항 비행 (약 4시간 소요)</div>
+              <div class="tl-time">21:00</div>
+              <div class="tl-title">김해국제공항 출발 (PUS)</div>
+              <div class="tl-desc">진에어 LJ531 부산 ➔ 괌 직항 비행 (약 4시간 소요)</div>
             </div>
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">01:40 (+1일)</div>
-              <div class="tl-title">괌 안토니오 B. 원 팻 공항 도착</div>
-              <div class="tl-desc">입국심사 (목적: Training program), 세관검역(EDF QR 통과) 및 전용 버스 탑승</div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-time">02:30</div>
-              <div class="tl-title">가든코트 기숙사 체크인 & 취침</div>
-              <div class="tl-desc">객실 배정(4인 1실), 개인 짐 정리 및 휴식 (※수건·세면도구 미제공 유의)</div>
+              <div class="tl-time">01:50 (+1일)</div>
+              <div class="tl-title">괌 안토니오 B. 원팻 국제공항 도착 (GUM)</div>
+              <div class="tl-desc">입국심사 (목적: Training program), 세관검역(EDF QR) 및 숙소 이동</div>
+              <span class="tl-loc">숙소 이동 및 휴식</span>
             </div>
           </div>
         </div>
@@ -368,33 +377,63 @@
           <div class="timeline">
             <div class="tl-item">
               <div class="tl-dot"></div>
+              <div class="tl-time">07:30</div>
+              <div class="tl-title">조식</div>
+              <span class="tl-loc">숙소 내 공용주방</span>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">08:30</div>
+              <div class="tl-title">괌대학교(UOG) 이동</div>
+              <div class="tl-desc">단체 이동 차량 탑승 및 UOG 캠퍼스 도착</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
               <div class="tl-time">09:00</div>
-              <div class="tl-title">조식 & UOG 캠퍼스 이동</div>
-              <div class="tl-desc">간단 조식 후 괌대학교(UOG) 글로벌 러닝 센터 이동</div>
+              <div class="tl-title">웰컴 세레모니 & 캠퍼스 투어</div>
+              <span class="tl-loc">학생회관 / 렉처홀</span>
             </div>
             <div class="tl-item">
               <div class="tl-dot"></div>
               <div class="tl-time">10:00</div>
-              <div class="tl-title">오리엔테이션 & 한마 스프린트 워크숍</div>
-              <div class="tl-desc">현지 교수진 특강, 조별 버디 매칭 및 프로젝트 미션 오리엔테이션</div>
+              <div class="tl-title">괌대학 강의</div>
+              <span class="tl-loc">강의실</span>
             </div>
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">12:30</div>
-              <div class="tl-title">UOG 학생식당 중식 & 교류</div>
-              <div class="tl-desc">현지 버디 학생들과 팀별 점심 식사</div>
+              <div class="tl-time">11:00</div>
+              <div class="tl-title">팀빌딩 / 문화 액티비티</div>
+              <span class="tl-loc">아넥스 빌딩</span>
             </div>
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">14:00</div>
-              <div class="tl-title">글로벌 스프린트 팀 미션 수행</div>
-              <div class="tl-desc">캠퍼스 탐방 및 괌 로컬 문화·산업 분석 과제 활동</div>
+              <div class="tl-time">12:00</div>
+              <div class="tl-title">중식</div>
+              <span class="tl-loc">학생회관 / 필드하우스</span>
             </div>
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">18:00</div>
-              <div class="tl-title">투몬 비치 석식 & 자유시간</div>
-              <div class="tl-desc">투몬 중심가 맛집 탐방 및 야간 자유 휴식 (카카오택시 활용)</div>
+              <div class="tl-time">12:45</div>
+              <div class="tl-title">현장학습 이동</div>
+              <div class="tl-desc">전공별 현장 실습 장소로 이동</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">13:00</div>
+              <div class="tl-title">전공별 현장 학습</div>
+              <div class="tl-desc">현지 산업 및 전공별 연계 미션 실습</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">15:00</div>
+              <div class="tl-title">숙소 복귀</div>
+              <div class="tl-desc">가든코트 기숙사 복귀</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">15:00~</div>
+              <div class="tl-title">팀빌딩 및 석식</div>
+              <div class="tl-desc">조별 프로젝트 정리 및 저녁 식사</div>
             </div>
           </div>
         </div>
@@ -406,21 +445,50 @@
           <div class="timeline">
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">09:30</div>
-              <div class="tl-title">스프린트 프로젝트 최종 발표 & 수료식</div>
-              <div class="tl-desc">팀별 결과물 피칭, UOG 공식 수료증 수여 및 단체 사진 촬영</div>
+              <div class="tl-time">07:30</div>
+              <div class="tl-title">조식</div>
+              <span class="tl-loc">숙소 내 공용주방</span>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background: var(--teal);"></div>
+              <div class="tl-time">09:30 - 13:00</div>
+              <div class="tl-title">🌴 괌 아일랜드 투어 - 문화·역사 탐방</div>
+              <div class="tl-desc">
+                <strong>① 에메랄드 밸리 (Emerald Valley)</strong><br>
+                <strong>② 솔레다드 요새 (Fort Soledad, 화장실 있음)</strong><br>
+                <strong>③ 메리조 피어 (Merizo Pier)</strong>
+              </div>
             </div>
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">13:30</div>
-              <div class="tl-title">괌 남부 아일랜드 투어</div>
-              <div class="tl-desc">사랑의 절벽, 스페인 광장, 세티만 전망대 등 명소 탐방 & 사진 미션</div>
+              <div class="tl-time">13:00</div>
+              <div class="tl-title">중식</div>
+              <span class="tl-loc">숙소 내 공용주방</span>
             </div>
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">18:30</div>
-              <div class="tl-title">환송 만찬 & 팀 네트워킹</div>
-              <div class="tl-desc">연수 성과 회고 및 학우·교수진 화합의 밤</div>
+              <div class="tl-time">14:00 - 19:00</div>
+              <div class="tl-title">팀빌딩 및 석식</div>
+              <span class="tl-loc">투몬 지역 내 탐방</span>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background: #ef4444;"></div>
+              <div class="tl-time">-19:00</div>
+              <div class="tl-title">⚠️ 숙소 퇴실 (체크아웃)</div>
+              <div class="tl-desc">객실 청결 정리, 개인 짐 완비 및 카드키 반납</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot" style="background: var(--accent);"></div>
+              <div class="tl-time">22:00</div>
+              <div class="tl-title">🛍️ 현지 쇼핑몰 방문: Don Don Donki</div>
+              <div class="tl-desc">빌리지 오브 돈키 단체 쇼핑! 바나나칩, 고디바, 기념품, 간식 쇼핑</div>
+              <span class="tl-loc">Don Don Donki</span>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-time">23:30</div>
+              <div class="tl-title">공항 이동</div>
+              <div class="tl-desc">괌 국제공항으로 단체 이동 및 출국 수속 준비</div>
             </div>
           </div>
         </div>
@@ -432,35 +500,28 @@
           <div class="timeline">
             <div class="tl-item">
               <div class="tl-dot"></div>
-              <div class="tl-time">11:00</div>
-              <div class="tl-title">가든코트 기숙사 체크아웃</div>
-              <div class="tl-desc">객실 청결 정리 및 카드키 반납 (분실 주의)</div>
+              <div class="tl-time">02:50</div>
+              <div class="tl-title">괌 국제공항 출발 (GUM)</div>
+              <div class="tl-desc">진에어 LJ532 탑승 및 귀국 비행</div>
             </div>
             <div class="tl-item">
-              <div class="tl-dot" style="background: var(--accent);"></div>
-              <div class="tl-time">14:00</div>
-              <div class="tl-title">🛍️ Don Don Donki (돈키호테 괌) 단체 방문!</div>
-              <div class="tl-desc">공식 일정 19번 쇼핑 코스! 괌 기념품, 바나나칩, 과자, 초콜릿 쇼핑 및 푸드코트 중식</div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-time">18:00</div>
-              <div class="tl-title">투몬 시내 마지막 자유시간</div>
-              <div class="tl-desc">선셋 감상, K마트 또는 쇼핑몰 자유 이동</div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-time">23:30</div>
-              <div class="tl-title">괌 국제공항 이동 & 출국 수속</div>
-              <div class="tl-desc">진에어 카운터 수하물 위탁 및 보안검색</div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-time">02:50 (+1일)</div>
-              <div class="tl-title">진에어 LJ532 탑승 ➔ 06:40 김해 도착</div>
-              <div class="tl-desc">부산 김해공항 무사 귀국 및 해산</div>
+              <div class="tl-dot" style="background: var(--success);"></div>
+              <div class="tl-time">06:15</div>
+              <div class="tl-title">김해국제공항 도착 (PUS)</div>
+              <div class="tl-desc">부산 김해공항 안전 귀국 및 일정 공식 종료·해산</div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Meal Info Box -->
+      <div class="meal-card">
+        <div class="meal-title">🍱 식사 제공 안내</div>
+        <div class="meal-desc">* 괌대학교 일정이 있는 2일차 중식 외 전 일정 식사는 <strong>숙소 내 공용주방</strong>에서 제공됩니다.</div>
+        <div class="meal-times">
+          <span>🍳 조식 07:30~09:00</span>
+          <span>🍱 중식 12:00~13:30</span>
+          <span>🍲 석식 17:30~18:30</span>
         </div>
       </div>
     </div>
@@ -524,11 +585,11 @@
         </div>
         <div class="phrase-card" data-cat="hotel">
           <div>
-            <div class="phrase-kr">"에어컨 온도를 조절하고 싶어요"</div>
-            <div class="phrase-en">How do I adjust the air conditioner?</div>
-            <div class="phrase-pron">하우 두 아이 어저스트 디 에어컨디셔너?</div>
+            <div class="phrase-kr">"체크아웃 할게요"</div>
+            <div class="phrase-en">I'd like to check out, please.</div>
+            <div class="phrase-pron">아이드 라이크 투 체크아웃 플리즈</div>
           </div>
-          <button class="speak-btn" onclick="speak('How do I adjust the air conditioner?')">🔊</button>
+          <button class="speak-btn" onclick="speak('I would like to check out, please.')">🔊</button>
         </div>
 
         <!-- Dining -->
@@ -632,13 +693,40 @@
 
     <!-- TAB 4: MAPS -->
     <div id="tab-map" class="tab-content">
-      <div class="section-title">🗺️ 주요 거점 & 구글 지도</div>
+      <div class="section-title">🗺️ 투어 코스 & 주요 거점 구글 지도</div>
+
+      <div class="spot-card">
+        <div class="spot-icon">🌊</div>
+        <div>
+          <div class="spot-name">에메랄드 밸리 (Emerald Valley)</div>
+          <div class="spot-desc">3일차 투어 ①코스! 투명한 청록색 바다 수로 인생샷 명소</div>
+        </div>
+        <a href="https://maps.google.com/?q=Emerald+Valley+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
+
+      <div class="spot-card">
+        <div class="spot-icon">🏰</div>
+        <div>
+          <div class="spot-name">솔레다드 요새 (Fort Soledad)</div>
+          <div class="spot-desc">3일차 투어 ②코스! 우마탁 베이 전경 & 대포 유적 (화장실 구비)</div>
+        </div>
+        <a href="https://maps.google.com/?q=Fort+Nuestra+Senora+de+la+Soledad+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
+
+      <div class="spot-card">
+        <div class="spot-icon">⚓</div>
+        <div>
+          <div class="spot-name">메리조 피어 (Merizo Pier)</div>
+          <div class="spot-desc">3일차 투어 ③코스! 괌 최남단 부둣가 목재 데크 사진 명소</div>
+        </div>
+        <a href="https://maps.google.com/?q=Merizo+Pier+Park+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
 
       <div class="spot-card">
         <div class="spot-icon">🏬</div>
         <div>
           <div class="spot-name">Don Don Donki (빌리지 오브 돈키)</div>
-          <div class="spot-desc">마지막 날 방문 코스! 기념품, 식료품, 푸드코트</div>
+          <div class="spot-desc">3일차 22:00 단체 쇼핑! 기념품, 식료품, 푸드코트</div>
         </div>
         <a href="https://maps.google.com/?q=Don+Don+Donki+Guam" target="_blank" class="map-btn">길찾기</a>
       </div>
@@ -647,7 +735,7 @@
         <div class="spot-icon">🏫</div>
         <div>
           <div class="spot-name">가든코트 기숙사 (Garden Court)</div>
-          <div class="spot-desc">연수 기간 숙소 (투몬 중심가 인근)</div>
+          <div class="spot-desc">연수 기간 숙소 (3일차 19:00 퇴실)</div>
         </div>
         <a href="https://maps.google.com/?q=Garden+Court+Guam" target="_blank" class="map-btn">길찾기</a>
       </div>
@@ -656,25 +744,16 @@
         <div class="spot-icon">🎓</div>
         <div>
           <div class="spot-name">괌대학교 (University of Guam)</div>
-          <div class="spot-desc">한마 글로벌 스프린트 워크숍 & 수료식</div>
+          <div class="spot-desc">2일차 웰컴 세레모니, 강의, 중식, 팀 액티비티</div>
         </div>
         <a href="https://maps.google.com/?q=University+of+Guam" target="_blank" class="map-btn">길찾기</a>
-      </div>
-
-      <div class="spot-card">
-        <div class="spot-icon">🛒</div>
-        <div>
-          <div class="spot-name">괌 K마트 (Kmart Guam)</div>
-          <div class="spot-desc">24시간 미국 대형마트, 센트룸, 바나나보트 선크림</div>
-        </div>
-        <a href="https://maps.google.com/?q=Kmart+Guam" target="_blank" class="map-btn">길찾기</a>
       </div>
 
       <div class="spot-card">
         <div class="spot-icon">🏖️</div>
         <div>
           <div class="spot-name">투몬 비치 (Tumon Beach)</div>
-          <div class="spot-desc">선셋 명소, 에메랄드빛 해변 산책로</div>
+          <div class="spot-desc">2~3일차 오후 팀빌딩 & 석식 투몬 탐방 명소</div>
         </div>
         <a href="https://maps.google.com/?q=Tumon+Beach+Guam" target="_blank" class="map-btn">길찾기</a>
       </div>
@@ -686,8 +765,9 @@
 
       <div class="tip-box">
         <div class="tip-title">⚠️ 가든코트 기숙사 필수 준수사항</div>
-        • <strong>수건·세면도구 미제공:</strong> 수건, 칫솔, 샴푸 등 개인 지참 필수<br>
-        • <strong>21:00 이후 정숙:</strong> 타 객실 방문 절대 금지 (적발 시 퇴실)<br>
+        • <strong>수건·세면도구 미제공:</strong> 개인 수건, 칫솔, 샴푸 등 필수 지참<br>
+        • <strong>3일차 19:00 퇴실:</strong> 투몬 탐방 후 19시까지 퇴실 및 짐 정리 완료<br>
+        • <strong>21:00 이후 정숙:</strong> 타 객실 방문 절대 금지 (적발 시 퇴실 조치)<br>
         • <strong>면세점 주류 반입 금지:</strong> 기숙사 내 음주 적발 시 징계<br>
         • <strong>쓰레기 무단투기 금지:</strong> 복도 투기 적발 시 벌금 $300 부과
       </div>
@@ -695,7 +775,7 @@
       <div class="tip-box" style="background: #e6f7f8; border-color: #87e8de;">
         <div class="tip-title" style="color: #006d75;">💡 괌 현지 이동 팁</div>
         • <strong>카카오택시:</strong> 괌에서도 한국 카카오T로 택시 호출 가능!<br>
-        • <strong>PIC 무료 셔틀:</strong> PIC 호텔 앞에서 돈키호테 무료 셔틀 운행
+        • <strong>솔레다드 요새:</strong> 아일랜드 투어 코스 중 화장실 구비 스팟
       </div>
 
       <div class="card" style="margin-top: 14px;">
