@@ -97,7 +97,7 @@
       color: var(--text-muted);
       cursor: pointer;
       gap: 4px;
-      width: 20%;
+      flex: 1; min-width: 0;
     }
     .nav-btn.active { color: var(--primary); }
     .nav-icon { font-size: 20px; }
@@ -118,6 +118,42 @@
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
     }
+
+    
+    /* Mission Tab Styles */
+    .rule-card {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+    .rule-title { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+    .rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .rule-item { background: rgba(255,255,255,0.15); padding: 8px 10px; border-radius: 10px; font-size: 11px; }
+    .rule-item strong { display: block; font-size: 12px; margin-bottom: 2px; }
+    .mission-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .mission-card.done {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .m-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .m-tag { font-size: 11px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 6px; }
+    .m-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #f1f5f9; color: #64748b; }
+    .mission-card.done .m-badge { background: #dcfce7; color: #15803d; }
+    .m-title { font-size: 14px; font-weight: 800; color: var(--text); }
+    .m-desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+    .m-tips { font-size: 11px; color: #d97706; background: #fffbeb; padding: 6px 8px; border-radius: 6px; margin-top: 8px; border: 1px dashed #fcd34d; }
 
     /* Itinerary Timeline */
     .day-selector { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
@@ -794,6 +830,10 @@
       <span class="nav-icon">🗓️</span>
       <span>일정</span>
     </button>
+    <button class="nav-btn" onclick="switchTab('mission', this)">
+      <span class="nav-icon">🎯</span>
+      <span>미션</span>
+    </button>
     <button class="nav-btn" onclick="switchTab('english', this)">
       <span class="nav-icon">🗣️</span>
       <span>회화</span>
@@ -932,6 +972,32 @@
       loadMemos();
     }
     loadMemos();
+
+    // Mission Checkbox Toggle & LocalStorage
+    function loadMissions() {
+      const checked = JSON.parse(localStorage.getItem('guam_missions') || '{}');
+      for (let i = 1; i <= 10; i++) {
+        const card = document.getElementById('m-card-' + i);
+        const badge = document.getElementById('m-badge-' + i);
+        if (card && badge) {
+          if (checked[i]) {
+            card.classList.add('done');
+            badge.innerText = '수행완료 ✓';
+          } else {
+            card.classList.remove('done');
+            badge.innerText = '미완료';
+          }
+        }
+      }
+    }
+
+    function toggleMission(num) {
+      const checked = JSON.parse(localStorage.getItem('guam_missions') || '{}');
+      checked[num] = !checked[num];
+      localStorage.setItem('guam_missions', JSON.stringify(checked));
+      loadMissions();
+    }
+    loadMissions();
   </script>
 </body>
 </html>
