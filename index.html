@@ -344,6 +344,81 @@
     .del-btn { color: #ef4444; background: none; border: none; font-size: 14px; cursor: pointer; padding: 4px; }
     .tip-box { background: #fff8e6; border: 1px solid #ffd591; border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-bottom: 10px; }
     .tip-title { font-weight: 800; color: #d46b08; margin-bottom: 4px; }
+
+    /* Emergency / Info Cards */
+    .header-emergency {
+      background: rgba(255, 107, 74, 0.95);
+      border: 1px solid rgba(255,255,255,0.5);
+      color: #fff; font-size: 11px; font-weight: 800;
+      padding: 5px 10px; border-radius: 999px; cursor: pointer;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .call-btn {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 13px 14px; margin-bottom: 8px; text-decoration: none; color: var(--text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .call-btn.urgent { background: #fef2f2; border-color: #fecaca; }
+    .call-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0;
+    }
+    .call-btn.urgent .call-icon { background: #dc2626; }
+    .call-name { font-size: 13px; font-weight: 700; }
+    .call-num { font-size: 16px; font-weight: 900; color: var(--primary); letter-spacing: 0.3px; margin-top: 1px; }
+    .call-btn.urgent .call-num { color: #dc2626; }
+    .call-note { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .step-row { display: flex; gap: 6px; margin-top: 10px; }
+    .step-item {
+      flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 8px 5px; text-align: center; font-size: 10.5px; font-weight: 600; color: #475569; line-height: 1.35;
+    }
+    .step-item b { display: block; color: var(--accent); font-size: 10px; margin-bottom: 2px; }
+    .info-card {
+      background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 12px;
+      border: 1px solid var(--border); box-shadow: var(--shadow);
+    }
+    .info-title { font-size: 14px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .info-list { list-style: none; }
+    .info-list li {
+      font-size: 12.5px; color: #334155; padding-left: 14px; position: relative;
+      margin-bottom: 6px; line-height: 1.45;
+    }
+    .info-list li::before { content: "•"; position: absolute; left: 2px; color: var(--teal); font-weight: 900; }
+    .info-list li strong { color: var(--text); }
+    .alert-card { background: #fff1ee; border: 1px solid #ffc9bd; border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+    .alert-card.big { background: #fee2e2; border: 2px solid #f87171; }
+    .alert-title { color: #c2410c; font-weight: 800; font-size: 14px; display: flex; gap: 6px; align-items: center; }
+    .alert-card.big .alert-title { color: #b91c1c; font-size: 15px; }
+    .alert-body { font-size: 12.5px; color: #7c2d12; margin-top: 6px; line-height: 1.55; }
+    .pill-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .pill-ok { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+    .pill-no { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+
+    /* Wi-Fi list */
+    .wifi-list {
+      max-height: 340px; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border); border-radius: 10px; background: var(--bg);
+    }
+    .wifi-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border-bottom: 1px solid var(--border);
+    }
+    .wifi-row:last-child { border-bottom: none; }
+    .wifi-ssid { font-size: 12px; font-weight: 800; color: var(--primary); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .wifi-pw { font-size: 12px; color: #475569; margin-left: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.4px; }
+    .wifi-copy {
+      background: var(--teal-light); color: #0f766e; border: none; border-radius: 6px;
+      padding: 5px 8px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .wifi-copy.done { background: #dcfce7; color: #15803d; }
+
+    /* 7-tab navigation fit */
+    .bottom-nav .nav-btn { font-size: 10px; white-space: nowrap; }
+    .bottom-nav .nav-icon { font-size: 18px; }
   </style>
 </head>
 <body>
@@ -352,7 +427,10 @@
   <header>
     <div class="header-top">
       <span class="badge">경남대학교 × 괌대학교(UOG)</span>
-      <span style="font-size: 12px; opacity: 0.9;">2026.11.15~18</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 12px; opacity: 0.9; white-space: nowrap;">2026.11.15~18</span>
+        <button class="header-emergency" onclick="goTab('emergency')">🆘 비상연락</button>
+      </div>
     </div>
     <h1>🌴 괌 한마 글로벌 스프린트</h1>
     <div class="header-sub">학우 전용 포켓 가이드북 & 공식 일정표</div>
@@ -400,9 +478,19 @@
               <div class="tl-dot"></div>
               <div class="tl-time">01:50 (+1일)</div>
               <div class="tl-title">괌 안토니오 B. 원팻 국제공항 도착 (GUM)</div>
-              <div class="tl-desc">입국심사 (목적: Training program), 세관검역(EDF QR) 및 숙소 이동</div>
+              <div class="tl-desc">입국심사 (목적: Training program), 세관검역(EDF QR) 후 출국장에서 EAST ARRIVALS 버스 탑승</div>
               <span class="tl-loc">숙소 이동 및 휴식</span>
             </div>
+          </div>
+        </div>
+
+        <div class="alert-card big">
+          <div class="alert-title">🚌 괌 공항 도착 집결 장소</div>
+          <div class="alert-body">
+            출국장 나와서 <strong>우측 EAST ARRIVALS 출구 앞 흰색 대형 버스(JBL)</strong> 탑승!<br>
+            버스 앞면에 <strong>'경남대'</strong> 표기가 있습니다.<br><br>
+            미국 입국심사 소요 시간은 개인마다 달라 출국장을 나오는 시각이 제각각입니다.
+            <strong>출국장 나오는 즉시 버스로 이동</strong>해 버스에 있는 관계자에게 인원 체크를 받고 대기해 주세요.
           </div>
         </div>
       </div>
@@ -553,10 +641,10 @@
       <!-- Meal Info Box -->
       <div class="meal-card">
         <div class="meal-title">🍱 식사 제공 안내</div>
-        <div class="meal-desc">* 괌대학교 일정이 있는 2일차 중식 외 전 일정 식사는 <strong>숙소 내 공용주방</strong>에서 제공됩니다.</div>
+        <div class="meal-desc">* 괌대학교 일정이 있는 2일차 중식 외 전 일정 식사는 <strong>숙소 내 공용주방</strong>에서 제공됩니다. <strong>식사 후 본인 자리 정리</strong>까지 해주세요.</div>
         <div class="meal-times">
-          <span>🍳 조식 07:30~09:00</span>
-          <span>🍱 중식 12:00~13:30</span>
+          <span>🍳 조식 07:30~08:30</span>
+          <span>🍱 중식 12:00~13:00</span>
           <span>🍲 석식 17:30~18:30</span>
         </div>
       </div>
@@ -963,7 +1051,113 @@
 
     <!-- TAB 5: TIPS & MEMO -->
     <div id="tab-tips" class="tab-content">
-      <div class="section-title">📋 기숙사 수칙 & 학우 메모</div>
+      <div class="section-title">🏨 숙소 · 짐 & 학우 메모</div>
+
+      <div class="info-card" style="background: #fef2f2; border-color: #fecaca; display: flex; align-items: center; gap: 10px;">
+        <div style="font-size: 22px;">🆘</div>
+        <div style="flex: 1;">
+          <div style="font-size: 13px; font-weight: 800; color: #b91c1c;">비상 연락처는 [비상] 탭에서</div>
+          <div style="font-size: 11.5px; color: #7f1d1d; margin-top: 2px;">인솔자·911·영사콜센터를 한 번에 걸 수 있습니다.</div>
+        </div>
+        <button onclick="goTab('emergency')" style="background: #dc2626; color: #fff; border: none; border-radius: 8px; padding: 8px 10px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;">바로가기</button>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">🏨 가든코트(Garden Court) 숙소 안내</div>
+
+        <div style="font-size: 12px; font-weight: 800; color: var(--primary); margin-bottom: 6px;">🍽️ 식당(공용주방) 찾아가는 길</div>
+        <ul class="info-list">
+          <li><strong>1층 숙소 엘리베이터</strong> 탑승 → <strong>3층 하차</strong></li>
+          <li><strong>구름다리</strong>를 건너 <strong>수영장</strong>을 지나 <strong>로비 방향</strong>으로</li>
+          <li><strong>헬스장 맞은편 라운지</strong>가 식당입니다</li>
+        </ul>
+
+        <div style="font-size: 12px; font-weight: 800; color: var(--primary); margin: 14px 0 6px;">🕒 식사 시간</div>
+        <div class="pill-row">
+          <span class="pill-ok">조식 07:30~08:30</span>
+          <span class="pill-ok">중식 12:00~13:00</span>
+          <span class="pill-ok">석식 17:30~18:30</span>
+        </div>
+        <ul class="info-list" style="margin-top: 8px;">
+          <li>식사 후에는 <strong>본인 자리 정리</strong>까지 꼭 해주세요.</li>
+        </ul>
+
+        <div style="font-size: 12px; font-weight: 800; color: var(--primary); margin: 14px 0 6px;">🏊 공용 공간 & 셔틀</div>
+        <ul class="info-list">
+          <li><strong>수영장</strong> 09:00~20:00</li>
+          <li><strong>헬스장</strong> 08:00~21:00</li>
+          <li><strong>셔틀 탑승 장소:</strong> 오션뷰 로비 쪽 주차장</li>
+        </ul>
+
+        <div style="font-size: 12px; font-weight: 800; color: var(--primary); margin: 14px 0 6px;">❄️ 에어컨 조정</div>
+        <ul class="info-list">
+          <li>객실 패널 가운데 <strong>동그란 버튼을 좌우로 회전</strong></li>
+          <li>최대 <strong>80°F</strong>까지 조절되며, <strong>전원 완전 끄기는 불가</strong>합니다.</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">📶 객실별 Wi-Fi</div>
+        <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.45;">SSID와 비밀번호는 <strong>대소문자 구분</strong>입니다. <strong>복사</strong> 버튼을 누르면 비밀번호가 복사됩니다.</div>
+        <input id="wifi-filter" class="memo-input" style="margin-bottom: 8px; font-size: 13px;" placeholder="🔍 객실 SSID 검색 (예: A794)" oninput="filterWifi()">
+        <div id="wifi-list" class="wifi-list"></div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">※ 객실에 배정된 SSID를 먼저 확인한 뒤 연결하세요.</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">🛂 미국 세관 반입 금지</div>
+        <div class="pill-row">
+          <span class="pill-no">🚫 육가공품(소시지·라면 스프)</span>
+          <span class="pill-no">🚫 생과일</span>
+          <span class="pill-no">🚫 씨앗류</span>
+        </div>
+        <ul class="info-list" style="margin-top: 10px;">
+          <li><strong>미신고 시 과태료:</strong> 미국 세관 검사가 강화되어 신고하지 않고 반입하다 적발되면 과태료가 부과됩니다.</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">✈️ 기내 · 위탁 수하물 주의</div>
+        <ul class="info-list">
+          <li><strong>보조배터리 · 손선풍기:</strong> 위탁 절대 불가, <strong>기내 휴대만 가능</strong> (100Wh / 20,000mAh 이하 최대 5개)</li>
+          <li><strong>무선 고데기:</strong> 배터리 일체형(분리 불가)은 <strong>기내·위탁 모두 전면 금지</strong>! 분리형만 본체는 위탁, 배터리는 기내 휴대</li>
+          <li><strong>액체류(화장품·김치·고추장 등):</strong> <strong>용기 크기</strong> 100mL 이하만 1L 투명 지퍼백 1개에 밀봉해 기내 반입. 100mL 초과(500mL 텀블러 내 잔여 물 포함)·김치·고추장은 위탁 수하물로</li>
+          <li><strong>칼 · 가위:</strong> 날 6cm 이하 소형가위·손톱까이·족집게·전기면도기는 기내 가능, 6cm 초과 가위·과도 등은 위탁 수하물만 가능</li>
+          <li><strong>일회용 라이터:</strong> 1인 1개를 몸에 직접 소지할 때만 탑승 가능 (가방·위탁 불가)</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">🏠 가든코트 기숙사 구비 · 미구비</div>
+        <div style="font-size: 12px; font-weight: 800; color: #047857; margin-bottom: 6px;">✔ 구비</div>
+        <div class="pill-row">
+          <span class="pill-ok">냉장고</span>
+          <span class="pill-ok">Wi-Fi</span>
+          <span class="pill-ok">드라이기(필요시)</span>
+          <span class="pill-ok">공용주방 · 정수기</span>
+          <span class="pill-ok">코인 세탁기</span>
+        </div>
+        <div style="font-size: 12px; font-weight: 800; color: #b91c1c; margin: 12px 0 6px;">✘ 미구비 (개인 지참)</div>
+        <div class="pill-row">
+          <span class="pill-no">거울</span>
+          <span class="pill-no">수건</span>
+          <span class="pill-no">세면용품(치약·칫솔·샴푸)</span>
+        </div>
+        <ul class="info-list" style="margin-top: 10px;">
+          <li><strong>소형 멀티탭 권장:</strong> 콘센트가 부족하니 110V 어댑터와 함께 챙기세요.</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">👥 현지 생활 수칙</div>
+        <ul class="info-list">
+          <li><strong>2인 이상 조별 이동 필수:</strong> 개인 행동은 엄금입니다.</li>
+          <li><strong>집결 시간 10분 전 도착:</strong> 공지된 모든 시간에 10분 전까지 모여 주세요.</li>
+          <li><strong>투몬 외 외곽 지역 야간 출입 자제</strong></li>
+          <li><strong>기숙사 내 외부인 출입 절대 금지</strong></li>
+          <li>야간 소음 자제, 공용주방·정수기 사용 후 청결 유지, 귀중품은 개인 보관</li>
+        </ul>
+      </div>
 
       <div class="tip-box">
         <div class="tip-title">⚠️ 가든코트 기숙사 필수 준수사항</div>
@@ -988,33 +1182,103 @@
       </div>
     </div>
 
+    <!-- TAB: EMERGENCY -->
+    <div id="tab-emergency" class="tab-content">
+      <div class="section-title">🆘 비상 연락처</div>
+
+      <div class="alert-card big">
+        <div class="alert-title">📞 무슨 일이 생기면 가장 먼저 인솔자에게</div>
+        <div class="alert-body">연수 기간 내내 24시간 상시 가동됩니다. 아래 번호는 <strong>누르면 바로 전화</strong>가 걸립니다.</div>
+      </div>
+
+      <a href="tel:01071564433" class="call-btn urgent">
+        <span class="call-icon">📞</span>
+        <div>
+          <div class="call-name">프로그램 인솔자 (24시간)</div>
+          <div class="call-num">010-7156-4433</div>
+          <div class="call-note">괌에서 걸 때는 국가번호를 붙여 +82-10-7156-4433</div>
+        </div>
+      </a>
+
+      <a href="tel:911" class="call-btn urgent">
+        <span class="call-icon">🚨</span>
+        <div>
+          <div class="call-name">괌 현지 긴급구조</div>
+          <div class="call-num">911</div>
+          <div class="call-note">경찰 · 소방 · 구급 (미국 현지 번호)</div>
+        </div>
+      </a>
+
+      <a href="tel:+16716476488" class="call-btn">
+        <span class="call-icon">🏛️</span>
+        <div>
+          <div class="call-name">주하가냐 대한민국 출장소</div>
+          <div class="call-num">+1-671-647-6488</div>
+          <div class="call-note">여권 분실 · 신변 위험 등 영사 도움</div>
+        </div>
+      </a>
+
+      <a href="tel:+82232100404" class="call-btn">
+        <span class="call-icon">🇰🇷</span>
+        <div>
+          <div class="call-name">영사콜센터 (외교부)</div>
+          <div class="call-num">+82-2-3210-0404</div>
+          <div class="call-note">해외에서 24시간 한국어 상담</div>
+        </div>
+      </a>
+
+      <div class="info-card" style="margin-top: 14px;">
+        <div class="info-title">🧭 비상 상황 대응 순서</div>
+        <div class="step-row">
+          <div class="step-item"><b>STEP 1</b>상황 발생<br>인솔자 보고</div>
+          <div class="step-item"><b>STEP 2</b>현지 응급조치<br>· 병원 이동</div>
+          <div class="step-item"><b>STEP 3</b>대학 본부<br>· 보호자 통보</div>
+          <div class="step-item"><b>STEP 4</b>후속 조치<br>· 현지 수습</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">📌 기억해 둘 것</div>
+        <ul class="info-list">
+          <li>몸살·발열·부상 등 건강 이상이 생기면 바로 인솔자에게 알리세요.</li>
+          <li>학과 인솔자 번호는 학과별로 안내받은 번호를 사용합니다.</li>
+          <li>여권과 별도로 여권 사본·사진을 핸드폰에 보관해 두면 분실 시 도움이 됩니다.</li>
+          <li>해외여행자보험 가입 여부와 보험사 연락처를 미리 확인해 두세요.</li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 
   <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('schedule', this)">
+    <button class="nav-btn active" data-tab="schedule" onclick="switchTab('schedule', this)">
       <span class="nav-icon">🗓️</span>
       <span>일정</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('mission', this)">
+    <button class="nav-btn" data-tab="mission" onclick="switchTab('mission', this)">
       <span class="nav-icon">🎯</span>
       <span>미션</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('english', this)">
+    <button class="nav-btn" data-tab="english" onclick="switchTab('english', this)">
       <span class="nav-icon">🗣️</span>
       <span>회화</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('calc', this)">
+    <button class="nav-btn" data-tab="calc" onclick="switchTab('calc', this)">
       <span class="nav-icon">💵</span>
       <span>환율</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('map', this)">
+    <button class="nav-btn" data-tab="map" onclick="switchTab('map', this)">
       <span class="nav-icon">🗺️</span>
       <span>지도</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('tips', this)">
-      <span class="nav-icon">📋</span>
-      <span>수칙</span>
+    <button class="nav-btn" data-tab="tips" onclick="switchTab('tips', this)">
+      <span class="nav-icon">🏨</span>
+      <span>숙소</span>
+    </button>
+    <button class="nav-btn" data-tab="emergency" onclick="switchTab('emergency', this)">
+      <span class="nav-icon">🆘</span>
+      <span>비상</span>
     </button>
   </nav>
 
@@ -1024,8 +1288,14 @@
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-' + tabId).classList.add('active');
-      btn.classList.add('active');
+      if (btn) { btn.classList.add('active'); }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Jump to a tab without a nav button reference (header / in-page shortcuts)
+    function goTab(tabId) {
+      const btn = document.querySelector('.nav-btn[data-tab="' + tabId + '"]');
+      switchTab(tabId, btn);
     }
 
     // Itinerary Day switching
@@ -1138,6 +1408,84 @@
       loadMemos();
     }
     loadMemos();
+
+    // 객실별 Wi-Fi 목록
+    const WIFI = [
+      ["M2000-A794", "47a20892"],
+      ["M2000-89AC", "6b0131fc"],
+      ["M2000-D226", "3ec39955"],
+      ["M2000-E00C", "e7a84985"],
+      ["M2000-AC70", "75b09408"],
+      ["M2000-8202", "b7cdb6qb"],
+      ["M2000-4986", "1b8a13ed"],
+      ["M2000-B9D4", "a78fd01d"],
+      ["M2000-7C2A", "7313d700"],
+      ["M2000-7C1C", "149aad72"],
+      ["M2000-F48C", "5a4d90fd"],
+      ["M2000-4770", "e631d67a"],
+      ["M2000-82F4", "c6d88a49"],
+      ["M2000-B856", "17660ba8"],
+      ["M2000-187A", "58aec04f"],
+      ["M2000-6038", "dee7d301"],
+      ["M2000-2612", "239e73ba"],
+      ["M2000-B49E", "2bd4bb91"],
+      ["M2000-9950", "ef0c937f"],
+      ["M2000-596A", "4e491fe9"]
+    ];
+
+    function renderWifi(keyword) {
+      const box = document.getElementById('wifi-list');
+      if (!box) return;
+      const q = (keyword || '').toUpperCase();
+      const rows = WIFI.filter(w => !q || w[0].toUpperCase().indexOf(q) !== -1);
+      if (rows.length === 0) {
+        box.innerHTML = '<div style="font-size:12px;color:#94a3b8;text-align:center;padding:14px;">일치하는 객실이 없습니다.</div>';
+        return;
+      }
+      box.innerHTML = rows.map(w =>
+        '<div class="wifi-row">' +
+          '<span class="wifi-ssid">' + w[0] + '</span>' +
+          '<span class="wifi-pw">' + w[1] + '</span>' +
+          '<button class="wifi-copy" onclick="copyWifi(\'' + w[1] + '\', this)">복사</button>' +
+        '</div>'
+      ).join('');
+    }
+
+    function filterWifi() {
+      const el = document.getElementById('wifi-filter');
+      renderWifi(el ? el.value.trim() : '');
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    function copyWifi(text, btn) {
+      const flash = () => {
+        if (!btn) return;
+        const original = btn.getAttribute('data-label') || '복사';
+        btn.setAttribute('data-label', original);
+        btn.innerText = '복사됨 ✓';
+        btn.classList.add('done');
+        setTimeout(() => { btn.innerText = original; btn.classList.remove('done'); }, 1500);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(flash).catch(() => { if (fallbackCopy(text)) flash(); });
+      } else if (fallbackCopy(text)) {
+        flash();
+      }
+    }
+
+    renderWifi('');
 
     // Mission Checkbox Toggle & LocalStorage
     function loadMissions() {
