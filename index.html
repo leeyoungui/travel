@@ -201,7 +201,7 @@
     }
     .meal-title { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
     .meal-desc { font-size: 12px; opacity: 0.9; margin-top: 4px; }
-    .meal-times { display: flex; justify-content: space-between; margin-top: 12px; background: rgba(255,255,255,0.12); padding: 10px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; }
+    .meal-times { display: flex; flex-wrap: wrap; gap: 4px 10px; justify-content: space-between; margin-top: 12px; background: rgba(255,255,255,0.12); padding: 10px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; }
 
     /* Flashcards */
     .category-pills { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px; scrollbar-width: none; }
@@ -394,6 +394,17 @@
     .alert-title { color: #c2410c; font-weight: 800; font-size: 14px; display: flex; gap: 6px; align-items: center; }
     .alert-card.big .alert-title { color: #b91c1c; font-size: 15px; }
     .alert-body { font-size: 12.5px; color: #7c2d12; margin-top: 6px; line-height: 1.55; }
+    .arrive-steps { list-style: none; counter-reset: arr; margin: 10px 0 0; }
+    .arrive-steps li {
+      counter-increment: arr; position: relative; padding-left: 30px;
+      margin-bottom: 9px; font-size: 12.5px; line-height: 1.5; color: #7c2d12;
+    }
+    .arrive-steps li:last-child { margin-bottom: 0; }
+    .arrive-steps li::before {
+      content: counter(arr); position: absolute; left: 0; top: 0;
+      width: 20px; height: 20px; border-radius: 50%; background: #dc2626; color: #fff;
+      font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    }
     .pill-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
     .pill-ok { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
     .pill-no { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
@@ -419,6 +430,13 @@
     /* 7-tab navigation fit */
     .bottom-nav .nav-btn { font-size: 10px; white-space: nowrap; }
     .bottom-nav .nav-icon { font-size: 18px; }
+
+    /* Narrow phone header */
+    @media (max-width: 420px) {
+      .header-top { gap: 6px; }
+      .badge { font-size: 10px; padding: 3px 8px; white-space: nowrap; }
+      .header-emergency { font-size: 10px; padding: 4px 8px; }
+    }
   </style>
 </head>
 <body>
@@ -485,12 +503,19 @@
         </div>
 
         <div class="alert-card big">
-          <div class="alert-title">🚌 괌 공항 도착 집결 장소</div>
+          <div class="alert-title">🚌 괌 공항 도착 집결 장소 (EAST ARRIVAL · JBL 버스)</div>
           <div class="alert-body">
-            출국장 나와서 <strong>우측 EAST ARRIVALS 출구 앞 흰색 대형 버스(JBL)</strong> 탑승!<br>
-            버스 앞면에 <strong>'경남대'</strong> 표기가 있습니다.<br><br>
-            미국 입국심사 소요 시간은 개인마다 달라 출국장을 나오는 시각이 제각각입니다.
-            <strong>출국장 나오는 즉시 버스로 이동</strong>해 버스에 있는 관계자에게 인원 체크를 받고 대기해 주세요.
+            <ol class="arrive-steps">
+              <li>입국장 <strong>'Welcome to Guam' 기둥</strong>을 나와서 <strong>오른쪽</strong>으로 이동</li>
+              <li>에스컬레이터를 지나쳐 <strong>'EAST ARRIVAL'</strong> 표지판 쪽으로 직진</li>
+              <li><strong>'MiFi' 렌탈샵</strong>이 보이면 <strong>정면 게이트 도어</strong>로 밖으로 나가기</li>
+              <li>게이트 밖으로 나와서 <strong>왼쪽에 주차된 흰색 대형 버스(JBL)</strong> 탑승</li>
+              <li>버스 앞면 <strong>'경남대'</strong> 표기 확인 후 탑승 대기</li>
+            </ol>
+            <div style="margin-top: 10px;">
+              미국 입국심사 소요 시간은 개인마다 달라 출국장을 나오는 시각이 제각각입니다.
+              <strong>출국장 나오는 즉시 버스로 이동</strong>해 버스에 있는 관계자에게 인원 체크를 받고 대기해 주세요.
+            </div>
           </div>
         </div>
       </div>
@@ -1122,7 +1147,7 @@
           <li><strong>보조배터리 · 손선풍기:</strong> 위탁 절대 불가, <strong>기내 휴대만 가능</strong> (100Wh / 20,000mAh 이하 최대 5개)</li>
           <li><strong>무선 고데기:</strong> 배터리 일체형(분리 불가)은 <strong>기내·위탁 모두 전면 금지</strong>! 분리형만 본체는 위탁, 배터리는 기내 휴대</li>
           <li><strong>액체류(화장품·김치·고추장 등):</strong> <strong>용기 크기</strong> 100mL 이하만 1L 투명 지퍼백 1개에 밀봉해 기내 반입. 100mL 초과(500mL 텀블러 내 잔여 물 포함)·김치·고추장은 위탁 수하물로</li>
-          <li><strong>칼 · 가위:</strong> 날 6cm 이하 소형가위·손톱까이·족집게·전기면도기는 기내 가능, 6cm 초과 가위·과도 등은 위탁 수하물만 가능</li>
+          <li><strong>칼 · 가위:</strong> 날 6cm 이하 소형가위·손톱깎이·족집게·전기면도기는 기내 가능, 6cm 초과 가위·과도 등은 위탁 수하물만 가능</li>
           <li><strong>일회용 라이터:</strong> 1인 1개를 몸에 직접 소지할 때만 탑승 가능 (가방·위탁 불가)</li>
         </ul>
       </div>
