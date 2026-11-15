@@ -427,6 +427,21 @@
     }
     .wifi-copy.done { background: #dcfce7; color: #15803d; }
 
+    /* Food recommendations */
+    .food-group {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow);
+    }
+    .food-group-title { font-size: 13.5px; font-weight: 800; color: var(--primary); }
+    .food-group-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; margin-bottom: 8px; }
+    .food-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-top: 1px dashed var(--border); }
+    .food-item:first-of-type { border-top: none; padding-top: 4px; }
+    .food-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .food-name { font-size: 13.5px; font-weight: 800; color: var(--text); }
+    .food-star { font-size: 11px; font-weight: 800; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 1px 5px; }
+    .food-meta { font-size: 11px; color: #0f766e; font-weight: 700; margin-top: 3px; }
+    .food-desc { font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.45; }
+
     /* 7-tab navigation fit */
     .bottom-nav .nav-btn { font-size: 10px; white-space: nowrap; }
     .bottom-nav .nav-icon { font-size: 18px; }
@@ -666,7 +681,7 @@
       <!-- Meal Info Box -->
       <div class="meal-card">
         <div class="meal-title">🍱 식사 제공 안내</div>
-        <div class="meal-desc">* 괌대학교 일정이 있는 2일차 중식 외 전 일정 식사는 <strong>숙소 내 공용주방</strong>에서 제공됩니다. <strong>식사 후 본인 자리 정리</strong>까지 해주세요.</div>
+        <div class="meal-desc">* 괌대학교 일정이 있는 2일차 중식 외 전 일정 식사는 <strong>숙소 내 공용주방</strong>에서 제공됩니다. <strong>식사 후 본인 자리 정리</strong>까지 해주세요.<br>🍽️ 자유시간 외식은 <strong>[지도] 탭의 '동선별 괌 맛집'</strong>을 참고하세요.</div>
         <div class="meal-times">
           <span>🍳 조식 07:30~08:30</span>
           <span>🍱 중식 12:00~13:00</span>
@@ -1071,6 +1086,84 @@
           <div class="spot-desc">2~3일차 오후 팀빌딩 & 석식 투몬 탐방 명소</div>
         </div>
         <a href="https://maps.google.com/?q=Tumon+Beach+Guam" target="_blank" class="map-btn">길찾기</a>
+      </div>
+
+      <div class="section-title" style="margin-top: 22px;">🍽️ 동선별 괌 맛집</div>
+
+      <div class="food-group">
+        <div class="food-group-title">🏠 숙소 도보 10분 · 투몬 저녁</div>
+        <div class="food-group-sub">가든코트에서 바로 걸어갈 수 있는 거리</div>
+        <div class="food-item">
+          <div style="flex: 1; min-width: 0;">
+            <div class="food-head"><span class="food-name">Beachin' Shrimp 2</span><span class="food-star">★4.1</span></div>
+            <div class="food-meta">도보 약 10분 · 600m · 매일 10:00~21:00</div>
+            <div class="food-desc">코코넛 쉬림프·감바스·파스타 등 부담 없는 투몬 인기 맛집</div>
+          </div>
+          <a href="https://maps.google.com/?cid=1943874218207146074" target="_blank" class="map-btn">지도</a>
+        </div>
+      </div>
+
+      <div class="food-group">
+        <div class="food-group-title">🏙️ 투몬 중심가 · 팀빌딩·자유시간</div>
+        <div class="food-group-sub">도보 약 25~28분 / 차량 약 5분</div>
+        <div class="food-item">
+          <div style="flex: 1; min-width: 0;">
+            <div class="food-head"><span class="food-name">Manang Pika Tumon</span><span class="food-star">★4.9</span></div>
+            <div class="food-meta">월~목 11:00~21:00</div>
+            <div class="food-desc">괌 로컬 차모로 퓨전 요리</div>
+          </div>
+          <a href="https://maps.google.com/?cid=15089732119808649525" target="_blank" class="map-btn">지도</a>
+        </div>
+        <div class="food-item">
+          <div style="flex: 1; min-width: 0;">
+            <div class="food-head"><span class="food-name">Anemos Restaurant</span><span class="food-star">★4.7</span></div>
+            <div class="food-meta">월·화 12:00~22:00 · 수 휴무</div>
+            <div class="food-desc">분위기 좋은 지중해·그릴 요리, 22시까지 여유롭게 식사</div>
+          </div>
+          <a href="https://maps.google.com/?cid=6317798073322830434" target="_blank" class="map-btn">지도</a>
+        </div>
+        <div class="food-item">
+          <div style="flex: 1; min-width: 0;">
+            <div class="food-head"><span class="food-name">BUNSIK</span><span class="food-star">★4.9</span></div>
+            <div class="food-meta">월~목 17:00~20:30</div>
+            <div class="food-desc">한식·분식이 그리울 때</div>
+          </div>
+          <a href="https://maps.google.com/?cid=5500705635928467607" target="_blank" class="map-btn">지도</a>
+        </div>
+        <div class="food-item">
+          <div style="flex: 1; min-width: 0;">
+            <div class="food-head"><span class="food-name">FujiIchiban Guam</span><span class="food-star">★4.0</span></div>
+            <div class="food-meta">월~토 11:00~24:00 · 일 휴무</div>
+            <div class="food-desc">밤늦게까지 여는 심야 라면</div>
+          </div>
+          <a href="https://maps.google.com/?cid=9559086539965286531" target="_blank" class="map-btn">지도</a>
+        </div>
+      </div>
+
+      <div class="food-group">
+        <div class="food-group-title">🛍️ 2일차 · 마이크로네시아 몰</div>
+        <div class="food-group-sub">몰 방문 시간에 맞춰 이용</div>
+        <div class="food-item">
+          <div style="flex: 1; min-width: 0;">
+            <div class="food-head"><span class="food-name">Pepper Lunch</span><span class="food-star">★4.4</span></div>
+            <div class="food-meta">매일 10:00~20:30</div>
+            <div class="food-desc">몰 안에서 빠르고 든든한 철판 스테이크·라이스</div>
+          </div>
+          <a href="https://maps.google.com/?cid=13237798319132716989" target="_blank" class="map-btn">지도</a>
+        </div>
+      </div>
+
+      <div class="food-group">
+        <div class="food-group-title">🌙 3일차 밤 · 돈돈돈키 (22:00~23:00)</div>
+        <div class="food-group-sub">공항 이동 전 야식 해결</div>
+        <div class="food-item">
+          <div style="flex: 1; min-width: 0;">
+            <div class="food-head"><span class="food-name">Village of Donki - Don Don Donki Guam</span><span class="food-star">★4.4</span></div>
+            <div class="food-meta">매일 07:00~01:00</div>
+            <div class="food-desc">귀국 전 밤 10시 이후 푸드코트·스시·도시락으로 야식 해결</div>
+          </div>
+          <a href="https://maps.google.com/?cid=10169232842015731859" target="_blank" class="map-btn">지도</a>
+        </div>
       </div>
     </div>
 
